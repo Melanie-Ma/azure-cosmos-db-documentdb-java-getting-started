@@ -67,5 +67,9 @@ public class Family {
     private Child[] children;
     private Address address;
     private boolean isRegistered;
-}
 
+    @Override
+    public String toString() {
+        return "id: " + this.id + ", " + "lastName: " + this.lastName;
+    }
+}

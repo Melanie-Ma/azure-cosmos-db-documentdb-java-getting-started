@@ -19,7 +19,6 @@ public class Program {
     private CosmosContainer container;
 
     private final String databaseName = "FamilyDB";
-
     private final String collectionName = "FamilyCollection";
 
     public static void main(String[] args) {
@@ -59,7 +58,7 @@ public class Program {
         database.createContainerIfNotExists(collectionName, "/id", ThroughputProperties.createManualThroughput(400));
         container = database.getContainer(collectionName);
 
-        // Create Item
+        // Create Items
         Family andersenFamily = getAndersenFamilyDocument();
         container.createItem(andersenFamily);
 
@@ -67,10 +66,17 @@ public class Program {
         container.createItem(wakefieldFamily);
 
         // Query Item
+        executeSimpleQuery(collectionName);
+
+        // Delete Database
+        database.delete();
+    }
+
+    private void executeSimpleQuery(String collectionName) {
         String containerSql = String.format("SELECT * from c where c.id = '%s'", collectionName);
         System.out.println(containerSql);
 
-        String itemSql = String.format("SELECT * from %s", collectionName);
+        String itemSql = String.format("SELECT * FROM Family WHERE Family.lastName = 'Andersen'", collectionName);
         System.out.println(itemSql);
 
         CosmosQueryRequestOptions queryOptions = new CosmosQueryRequestOptions();
@@ -86,9 +92,6 @@ public class Program {
             });
             System.out.println(id);
         }
-
-        // Delete Item
-        database.delete();
     }
 
     private Family getAndersenFamilyDocument() {
